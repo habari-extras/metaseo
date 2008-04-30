@@ -123,7 +123,7 @@ class MetaSeo extends Plugin
 		if ( $plugin_id == $this->plugin_id() ) {
 			switch ( $action ) {
 				case _t('Configure' ) :
-					$ui = new FormUI( self::OPTION_NAME );
+					$ui= new FormUI( self::OPTION_NAME );
 					// Add a text control for the home page description
 					$home_desc= $ui->add( 'textarea', 'home_desc', _t('Home Page Description: ' ) );
 					$ui->add( 'fieldset', _t( 'Description Options' ), array( $home_desc ) );
@@ -154,7 +154,7 @@ class MetaSeo extends Plugin
 	*/
 	public function action_post_update_status( $post, $new_status )
 	{
-		$vars = Controller::get_handler_vars();
+		$vars= Controller::get_handler_vars();
 		
 		if($vars['content_type'] == Post::type('entry') || $vars['content_type'] == Post::type('page')) {
 				$post->info->html_title= $vars['html_title'];
@@ -172,10 +172,10 @@ class MetaSeo extends Plugin
 	* @return array  containing the controls to be on the publish page
 	*/
 	public function filter_publish_controls ($controls, $post) {
-		$vars = Controller::get_handler_vars();
+		$vars= Controller::get_handler_vars();
 				
 		if( $vars['content_type'] == Post::type('entry') || $vars['content_type'] == Post::type('page') ) {
-			$output = '';
+			$output= '';
 			
 			$output.= '<div class="text container">';
 			$output.= '<p class="column span-2"><label for="html_title">Page Title:</label></p>';
@@ -184,7 +184,7 @@ class MetaSeo extends Plugin
 				$output .= $post->info->html_title;
 			}
 			$output .= '" /></p></div>';
-			$controls['Page Title'] = $output;
+			$controls['Page Title']= $output;
 		}
 		
 		return $controls;
@@ -228,7 +228,7 @@ class MetaSeo extends Plugin
 	**/
 	public function action_update_check()
 	{
-		Update::add( 'FriendFeed', 'DE6CFC70-1661-11DD-8BC9-25DB55D89593', $this->info->version );
+		Update::add( 'Meta SEO', 'DE6CFC70-1661-11DD-8BC9-25DB55D89593', $this->info->version );
 	}
  
  	
@@ -269,8 +269,8 @@ class MetaSeo extends Plugin
 			$desc= str_replace( "\r\n", " ", $desc );
 			$desc= str_replace( "\n", " ", $desc );
 			$out= "<meta name=\"description\" content=\"";
-			$out.= $desc;
-			$out.= "\" >\n";
+			$out .= $desc;
+			$out .= "\" >\n";
 		}
 	
 		return $out;
@@ -324,8 +324,8 @@ class MetaSeo extends Plugin
 		}
 		if( strlen( $keywords ) ) {
 			$out= "<meta name=\"keywords\" content=\"";
-			$out.= $keywords;
-			$out.= "\" >\n";
+			$out .= $keywords;
+			$out .= "\" >\n";
 		}
 		return $out;
 	}
@@ -355,8 +355,8 @@ class MetaSeo extends Plugin
 		}
 		if( strlen( $robots ) ) {
 			$out= "<meta name=\"robots\" content=\"";
-			$out.= $robots;
-			$out.= "\" >\n";
+			$out .= $robots;
+			$out .= "\" >\n";
 		}
 		return $out;
 	}
@@ -401,32 +401,32 @@ class MetaSeo extends Plugin
 					else {
 						$out= $this->theme->post->title;
 					}
-					$out.= ' - ' . Options::get( 'title' );
+					$out .= ' - ' . Options::get( 'title' );
 					break;
 				case 'display_entries_by_date':
 					$out= 'Archive for ';
 					if( isset($this->theme->day) ) {
-						$out.= $this->theme->day . ' ';
+						$out .= $this->theme->day . ' ';
 					}
 					if( isset($this->theme->month) ) {
-						$out.= $months[$this->theme->month] . ' ';
+						$out .= $months[$this->theme->month] . ' ';
 					}
 					if (isset( $this->theme->year) ) {
-						$out.= $this->theme->year . ' ';
+						$out .= $this->theme->year . ' ';
 					}
-					$out.= ' - ' . Options::get( 'title' );
+					$out .= ' - ' . Options::get( 'title' );
 					break;
 				case 'display_entries_by_tag':
 					$out= $this->get_tag_text(Controller::get_var( 'tag' ) ) . ' Archive';
-					$out.= ' - ' . Options::get( 'title' );
+					$out .= ' - ' . Options::get( 'title' );
 					break;
 				case 'display_search':
 					$out= 'Search Results for ' . $this->theme->criteria ;
-					$out.= ' - ' . Options::get( 'title' );
+					$out .= ' - ' . Options::get( 'title' );
 					break;
 				case 'display_404':
 					$out= 'Page Not Found';
-					$out.= ' - ' . Options::get( 'title' );
+					$out .= ' - ' . Options::get( 'title' );
 					break;
 				case 'display_home':
 					$out= Options::get( 'title' ) . ' - ' . Options::get( 'tagline' );
