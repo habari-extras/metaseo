@@ -16,7 +16,7 @@ class MetaSeo extends Plugin
 	/**
 	* @var string plugin version number
 	*/
-	const VERSION= '0.2';
+	const VERSION= '0.21';
 	/**
 	* @var OPTION_NAME prepended to all options for saving/retrieval
 	*/
@@ -191,19 +191,19 @@ class MetaSeo extends Plugin
 	}
 
 	/**
-	* function filter_template_fallback
+	* function filter_final_output
 	*
 	* this filter is called before the display of any page,
-	* so it is used to begin buffering output if a page being
-	* displayed for normal readers is being requested
+	* so it is used to make any final changes to the output
+	* before it is sent to the browser
 	*
-	* @param $fallback string the theme template to display
-	* @return  string the theme template to display. unmodified
+	* @param $buffer string the page being sent to the browser
+	* @return  string the modified page
 	*/
-	public function filter_template_fallback($fallback)
+	public function filter_final_output( $buffer )
 	{
-		ob_start(array( $this, 'dotags' ));
-		return $fallback;
+		$buffer= $this->dotags( $buffer );
+		return $buffer;
 	}
 	
 	/**

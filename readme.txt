@@ -38,4 +38,8 @@ Cleanup
 
 Changelog
 
+Version 0.21
+
+Fixed: Output buffering was changed in Habari, breaking the buffering Meta SEO used. 
+
 Version 0.2 - Initial release
