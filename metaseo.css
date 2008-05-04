@@ -1,0 +1,37 @@
+input[type="submit"] {
+	clear: both;
+	float: left;
+
+}
+
+fieldset#HomePage {
+	width: 30em;
+	float: left;
+}
+
+fieldset#HomePage textarea{
+	width: 22em;
+	height: 8em;
+}
+
+fieldset#HomePage input[type="text"] {
+	width: 8em;
+}
+
+fieldset#Robots {
+	width: 30em;
+	float: right;
+}
+
+fieldset#Robots label{
+	padding: 0.2em;
+	display: block;
+	width: 17em;
+}
+
+fieldset#Robots input[type="checkbox"] {
+	float: right;
+	position: relative;
+	right: 1em;
+	top: -1.7em;
+}
