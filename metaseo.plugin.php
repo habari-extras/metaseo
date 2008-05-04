@@ -74,7 +74,7 @@ class MetaSeo extends Plugin
 		$tags= Tags::get();
 		foreach( $tags as $tag ) {
 			// limit to the first 50 tags to prevent keyword stuffing
-			if( count( $home_keywords ) < 50 ) {
+			if( count( $home_keys ) < 50 ) {
 				$home_keys[]= htmlspecialchars( strip_tags( $tag->tag ), ENT_COMPAT, 'UTF-8' );
 			}
 			else {
