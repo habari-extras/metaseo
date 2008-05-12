@@ -1,6 +1,6 @@
 Plugin: Meta SEO
 URL: http://habariproject.org
-Version: 0.3
+Version: 0.31
 Author: Habari Project
 
 Purpose 
@@ -49,8 +49,11 @@ Cleanup
 
 Changelog
 
-Version 0.3
+Version 0.31
+Fixed: Post titles in atom feed were all replaced by the site name and tagline.
+Fixed: Style changes in the configuration form to compensate for the new admin interface.
 
+Version 0.3
 Change: Made the keywords to use on the home page an option.
 Change: Made indexing and following links an option for the home page, individual posts and static pages, and archive pages.
 Change: Added an entry box for the entry or page keywords on the publish page.

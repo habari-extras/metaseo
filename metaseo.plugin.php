@@ -16,7 +16,7 @@ class MetaSeo extends Plugin
 	/**
 	* @var string plugin version number
 	*/
-	const VERSION= '0.3';
+	const VERSION= '0.31';
 	/**
 	* @var OPTION_NAME prepended to all options for saving/retrieval
 	*/
@@ -268,7 +268,15 @@ class MetaSeo extends Plugin
 	*/
 	public function filter_final_output( $buffer )
 	{
-		$buffer= $this->do_tags( $buffer );
+		$seo_title= $this->get_title();
+		if( strlen( $seo_title ) ) {
+			if( strpos( $buffer, '<title>' ) !== false ) {
+				$buffer= preg_replace("%<title\b[^>]*>(.*?)</title>%is", "<title>{$seo_title}</title>", $buffer );
+			}
+			else {
+				$buffer= preg_replace("%<head>%is", "<head>\n<title>{$seo_title}</title>", $buffer );
+			}
+		}
 		return $buffer;
 	}
 
@@ -389,7 +397,9 @@ class MetaSeo extends Plugin
 					$keywords= Controller::get_var( 'tag' );
 					break;
 				case 'display_home':
-					$keywords= implode( ', ', Options::get( self::OPTION_NAME . ':home_keywords' ) );
+					if( count( Options::get( self::OPTION_NAME . ':home_keywords' ) ) ) {
+						$keywords= implode( ', ', Options::get( self::OPTION_NAME . ':home_keywords' ) );
+					}
 					break;
 				default:
 			}
@@ -490,15 +500,9 @@ class MetaSeo extends Plugin
 		if (is_object( $matched_rule ) ) {
 			$rule= $matched_rule->name;
 			switch( $rule ) {
-				case 'display_entry':
-				case 'display_page':
-					if( strlen( $this->theme->post->info->html_title ) ) {
-						$out= $this->theme->post->info->html_title;
-					}
-					else {
-						$out= $this->theme->post->title;
-					}
-					$out .= ' - ' . Options::get( 'title' );
+				case 'display_home':
+				case 'display_entries':
+					$out= Options::get( 'title' ) . ' - ' . Options::get( 'tagline' );
 					break;
 				case 'display_entries_by_date':
 					$out= 'Archive for ';
@@ -517,6 +521,16 @@ class MetaSeo extends Plugin
 					$out= $this->get_tag_text(Controller::get_var( 'tag' ) ) . ' Archive';
 					$out .= ' - ' . Options::get( 'title' );
 					break;
+				case 'display_entry':
+				case 'display_page':
+					if( strlen( $this->theme->post->info->html_title ) ) {
+						$out= $this->theme->post->info->html_title;
+					}
+					else {
+						$out= $this->theme->post->title;
+					}
+					$out .= ' - ' . Options::get( 'title' );
+					break;
 				case 'display_search':
 					$out= 'Search Results for ' . $this->theme->criteria ;
 					$out .= ' - ' . Options::get( 'title' );
@@ -525,40 +539,15 @@ class MetaSeo extends Plugin
 					$out= 'Page Not Found';
 					$out .= ' - ' . Options::get( 'title' );
 					break;
-				case 'display_home':
-					$out= Options::get( 'title' ) . ' - ' . Options::get( 'tagline' );
-					break;
-				default:
-					$out= Options::get( 'title' ) . ' - ' . Options::get( 'tagline' );
 			}
 
-			$out= htmlspecialchars( strip_tags( $out ), ENT_COMPAT, 'UTF-8' );
-			$out= stripslashes( $out );
+			if( strlen( $out ) ) {
+				$out= htmlspecialchars( strip_tags( $out ), ENT_COMPAT, 'UTF-8' );
+				$out= stripslashes( $out );
+			}
 		}
 
 		return $out;
-	}
-
-	/**
-	* function dotags
-	* 
-	* replaces the contents of the html title tag with content more suitable for SEO purposes,
-	*
-	* @param $page the page being displayed
-	* @return string the contents of the modified page
-	*/
-	private function do_tags( $page )
-	{
-		$title= $this->get_title();
-
-		if( strpos( $page, '<title>' ) !== false ) {
-			$page= preg_replace("%<title\b[^>]*>(.*?)</title>%is", "<title>{$title}</title>", $page);
-		}
-		else {
-			$page= preg_replace("%<head>%is", "<head>\n<title>{$title}</title>", $page);
-		}
-
-		return $page;
 	}
 
 }

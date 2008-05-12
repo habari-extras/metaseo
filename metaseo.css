@@ -3,24 +3,9 @@ input[type="submit"] {
 	float: left;
 
 }
-
-fieldset#HomePage {
-	width: 30em;
-	float: left;
-}
-
-fieldset#HomePage textarea{
-	width: 22em;
-	height: 8em;
-}
-
-fieldset#HomePage input[type="text"] {
-	width: 8em;
-}
-
-fieldset#Robots {
-	width: 30em;
-	float: right;
+.formui {
+	background: #f5f5f5;
+	color: black;
 }
 
 fieldset#Robots label{
