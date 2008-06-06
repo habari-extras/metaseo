@@ -107,8 +107,8 @@ class MetaSeo extends Plugin
 	{
 		if ( realpath( $file ) == __FILE__ ) {
 			foreach ( self::default_options() as $name => $value ) {
-				if( !(Options::get( 'MetaSEO_' . $name ) ) ) {
-					Options::set( 'MetaSEO_' . $name, $value );
+				if( !(Options::get( 'MetaSEO__' . $name ) ) ) {
+					Options::set( 'MetaSEO__' . $name, $value );
 				}
 			}
 		}
@@ -146,17 +146,17 @@ class MetaSeo extends Plugin
 					$ui= new FormUI( 'MetaSEO' );
 					// Add a text control for the home page description and textmultis for the home page keywords
 					$ui->append( 'fieldset', 'HomePage', _t( 'HomePage' ) );
-					$ui->HomePage->append( 'textarea', 'home_desc', 'option:MetaSEO_home_desc', _t('Description: ' ) );
-					$ui->HomePage->append( 'textmulti', 'home_keywords', 'option:MetaSEO_home_keywords', _t( 'Keywords: ' ) );
+					$ui->HomePage->append( 'textarea', 'home_desc', 'option:MetaSEO__home_desc', _t('Description: ' ) );
+					$ui->HomePage->append( 'textmulti', 'home_keywords', 'option:MetaSEO__home_keywords', _t( 'Keywords: ' ) );
 					
 					// Add checkboxes for the indexing and link following options
 					$ui->append( 'fieldset', 'Robots', _t( 'Robots' ) );
-					$ui->Robots->append( 'checkbox', 'home_index', 'option:MetaSEO_home_index', _t( 'Index Home Page') );
-					$ui->Robots->append( 'checkbox', 'home_follow', 'option:MetaSEO_home_follow', _t( 'Follow Home Page Links' )  );
-					$ui->Robots->append( 'checkbox', 'posts_index', 'option:MetaSEO_posts_index', _t( 'Index Posts' ) );
-					$ui->Robots->append( 'checkbox', 'posts_follow', 'option:MetaSEO_posts_follow', _t( 'Follow Post Links' ) );
-					$ui->Robots->append( 'checkbox', 'archives_index', 'option:MetaSEO_archives_index', _t( 'Index Archives' ) );
-					$ui->Robots->append( 'checkbox', 'archives_follow', 'option:MetaSEO_archives_follow', _t( 'Follow Archive Links' ) );
+					$ui->Robots->append( 'checkbox', 'home_index', 'option:MetaSEO__home_index', _t( 'Index Home Page') );
+					$ui->Robots->append( 'checkbox', 'home_follow', 'option:MetaSEO__home_follow', _t( 'Follow Home Page Links' )  );
+					$ui->Robots->append( 'checkbox', 'posts_index', 'option:MetaSEO__posts_index', _t( 'Index Posts' ) );
+					$ui->Robots->append( 'checkbox', 'posts_follow', 'option:MetaSEO__posts_follow', _t( 'Follow Post Links' ) );
+					$ui->Robots->append( 'checkbox', 'archives_index', 'option:MetaSEO__archives_index', _t( 'Index Archives' ) );
+					$ui->Robots->append( 'checkbox', 'archives_follow', 'option:MetaSEO__archives_follow', _t( 'Follow Archive Links' ) );
 					
 					$ui->append( 'submit', 'save', _t( 'Save' ) );
 					$ui->out();
@@ -322,7 +322,7 @@ class MetaSeo extends Plugin
 			$rule= $matched_rule->name;
 			switch( $rule) {
 				case 'display_home':
-					$desc= Options::get( 'MetaSEO_home_desc' );
+					$desc= Options::get( 'MetaSEO__home_desc' );
 					break;
 				case 'display_entry':
 				case 'display_page':
@@ -383,8 +383,8 @@ class MetaSeo extends Plugin
 					$keywords= Controller::get_var( 'tag' );
 					break;
 				case 'display_home':
-					if( count( Options::get( 'MetaSEO_home_keywords' ) ) ) {
-						$keywords= implode( ', ', Options::get( 'MetaSEO_home_keywords' ) );
+					if( count( Options::get( 'MetaSEO__home_keywords' ) ) ) {
+						$keywords= implode( ', ', Options::get( 'MetaSEO__home_keywords' ) );
 					}
 					break;
 				default:
@@ -416,13 +416,13 @@ class MetaSeo extends Plugin
 			switch( $rule) {
 				case 'display_entry':
 				case 'display_page':
-					if( Options::get( 'MetaSEO_posts_index' ) ) {
+					if( Options::get( 'MetaSEO__posts_index' ) ) {
 						$robots= 'index';
 					}
 					else {
 						$robots= 'noindex';
 					}
-					if( Options::get( 'MetaSEO_posts_follow' ) ) {
+					if( Options::get( 'MetaSEO__posts_follow' ) ) {
 						$robots .= ', follow';
 					}
 					else {
@@ -430,13 +430,13 @@ class MetaSeo extends Plugin
 					}
 					break;
 				case 'display_home':
-					if( Options::get( 'MetaSEO_home_index' ) ) {
+					if( Options::get( 'MetaSEO__home_index' ) ) {
 						$robots= 'index';
 					}
 					else {
 						$robots= 'noindex';
 					}
-					if( Options::get( 'MetaSEO_home_follow' ) ) {
+					if( Options::get( 'MetaSEO__home_follow' ) ) {
 						$robots .= ', follow';
 					}
 					else {
@@ -446,13 +446,13 @@ class MetaSeo extends Plugin
 				case 'display_entries_by_tag':
 				case 'display_entries_by_date':
 				case 'display_entries':
-					if( Options::get( 'MetaSEO_archives_index' ) ) {
+					if( Options::get( 'MetaSEO__archives_index' ) ) {
 						$robots= 'index';
 					}
 					else {
 						$robots= 'noindex';
 					}
-					if( Options::get( 'MetaSEO_archives_follow' ) ) {
+					if( Options::get( 'MetaSEO__archives_follow' ) ) {
 						$robots .= ', follow';
 					}
 					else {
