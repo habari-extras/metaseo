@@ -16,11 +16,7 @@ class MetaSeo extends Plugin
 	/**
 	* @var string plugin version number
 	*/
-	const VERSION= '0.31';
-	/**
-	* @var OPTION_NAME prepended to all options for saving/retrieval
-	*/
-	const OPTION_NAME= 'MetaSEO';
+	const VERSION= '0.4';
 
 	/**
 	* @var $them Theme object that is currently being use for display
@@ -111,8 +107,8 @@ class MetaSeo extends Plugin
 	{
 		if ( realpath( $file ) == __FILE__ ) {
 			foreach ( self::default_options() as $name => $value ) {
-				if( !(Options::get( self::OPTION_NAME . ':' . $name ) ) ) {
-					Options::set( self::OPTION_NAME . ':' . $name, $value );
+				if( !(Options::get( 'MetaSEO_' . $name ) ) ) {
+					Options::set( 'MetaSEO_' . $name, $value );
 				}
 			}
 		}
@@ -147,36 +143,26 @@ class MetaSeo extends Plugin
 		if ( $plugin_id == $this->plugin_id() ) {
 			switch ( $action ) {
 				case _t('Configure' ) :
-					$ui= new FormUI( self::OPTION_NAME );
+					$ui= new FormUI( 'MetaSEO' );
 					// Add a text control for the home page description and textmultis for the home page keywords
-					$home_desc= $ui->add( 'textarea', 'home_desc', _t('Description: ' ) );
-					$home_keywords= $ui->add( 'textmulti', 'home_keywords', _t( 'Keywords: ' ) );
-					$ui->add( 'fieldset', _t( 'HomePage' ), array( $home_desc, $home_keywords ) );
+					$ui->append( 'fieldset', 'HomePage', _t( 'HomePage' ) );
+					$ui->HomePage->append( 'textarea', 'home_desc', 'option:MetaSEO_home_desc', _t('Description: ' ) );
+					$ui->HomePage->append( 'textmulti', 'home_keywords', 'option:MetaSEO_home_keywords', _t( 'Keywords: ' ) );
 					
 					// Add checkboxes for the indexing and link following options
-					$home_index= $ui->add( 'checkbox', 'home_index', _t( 'Index Home Page') );
-					$home_follow= $ui->add( 'checkbox', 'home_follow', _t( 'Follow Home Page Links' ) );
-					$posts_index= $ui->add( 'checkbox', 'posts_index', _t( 'Index Posts' ) );
-					$posts_follow= $ui->add( 'checkbox', 'posts_follow', _t( 'Follow Post Links' ) );
-					$archives_index= $ui->add( 'checkbox', 'archives_index', _t( 'Index Archives' ) );
-					$archives_follow= $ui->add( 'checkbox', 'archives_follow', _t( 'Follow Archive Links' ) );
-					$ui->add( 'fieldset', _t( 'Robots' ), array( $home_index, $home_follow, $posts_index, $posts_follow, $archives_index, $archives_follow ) );
+					$ui->append( 'fieldset', 'Robots', _t( 'Robots' ) );
+					$ui->Robots->append( 'checkbox', 'home_index', 'option:MetaSEO_home_index', _t( 'Index Home Page') );
+					$ui->Robots->append( 'checkbox', 'home_follow', 'option:MetaSEO_home_follow', _t( 'Follow Home Page Links' )  );
+					$ui->Robots->append( 'checkbox', 'posts_index', 'option:MetaSEO_posts_index', _t( 'Index Posts' ) );
+					$ui->Robots->append( 'checkbox', 'posts_follow', 'option:MetaSEO_posts_follow', _t( 'Follow Post Links' ) );
+					$ui->Robots->append( 'checkbox', 'archives_index', 'option:MetaSEO_archives_index', _t( 'Index Archives' ) );
+					$ui->Robots->append( 'checkbox', 'archives_follow', 'option:MetaSEO_archives_follow', _t( 'Follow Archive Links' ) );
 					
-					$ui->set_option( 'show_form_on_success', false );
+					$ui->append( 'submit', 'save', _t( 'Save' ) );
 					$ui->out();
 					break;
 			}
 		}
-	}
-
-	/**
-	* function save_options
-	 * Fail-safe method to force options to be saved in Habari's options table.
-	 *
-	 * @return bool Return true to force options to be saved in Habari's options table.
-	 */
-	public function save_options( $ui ) {
-		return true;
 	}
 
 	/**
@@ -336,7 +322,7 @@ class MetaSeo extends Plugin
 			$rule= $matched_rule->name;
 			switch( $rule) {
 				case 'display_home':
-					$desc= Options::get( self::OPTION_NAME . ':home_desc' );
+					$desc= Options::get( 'MetaSEO_home_desc' );
 					break;
 				case 'display_entry':
 				case 'display_page':
@@ -397,8 +383,8 @@ class MetaSeo extends Plugin
 					$keywords= Controller::get_var( 'tag' );
 					break;
 				case 'display_home':
-					if( count( Options::get( self::OPTION_NAME . ':home_keywords' ) ) ) {
-						$keywords= implode( ', ', Options::get( self::OPTION_NAME . ':home_keywords' ) );
+					if( count( Options::get( 'MetaSEO_home_keywords' ) ) ) {
+						$keywords= implode( ', ', Options::get( 'MetaSEO_home_keywords' ) );
 					}
 					break;
 				default:
@@ -430,13 +416,13 @@ class MetaSeo extends Plugin
 			switch( $rule) {
 				case 'display_entry':
 				case 'display_page':
-					if( Options::get(self::OPTION_NAME . ':posts_index' ) ) {
+					if( Options::get( 'MetaSEO_posts_index' ) ) {
 						$robots= 'index';
 					}
 					else {
 						$robots= 'noindex';
 					}
-					if( Options::get(self::OPTION_NAME . ':posts_follow' ) ) {
+					if( Options::get( 'MetaSEO_posts_follow' ) ) {
 						$robots .= ', follow';
 					}
 					else {
@@ -444,13 +430,13 @@ class MetaSeo extends Plugin
 					}
 					break;
 				case 'display_home':
-					if( Options::get(self::OPTION_NAME . ':home_index' ) ) {
+					if( Options::get( 'MetaSEO_home_index' ) ) {
 						$robots= 'index';
 					}
 					else {
 						$robots= 'noindex';
 					}
-					if( Options::get(self::OPTION_NAME . ':home_follow' ) ) {
+					if( Options::get( 'MetaSEO_home_follow' ) ) {
 						$robots .= ', follow';
 					}
 					else {
@@ -460,13 +446,13 @@ class MetaSeo extends Plugin
 				case 'display_entries_by_tag':
 				case 'display_entries_by_date':
 				case 'display_entries':
-					if( Options::get(self::OPTION_NAME . ':archives_index' ) ) {
+					if( Options::get( 'MetaSEO_archives_index' ) ) {
 						$robots= 'index';
 					}
 					else {
 						$robots= 'noindex';
 					}
-					if( Options::get(self::OPTION_NAME . ':archives_follow' ) ) {
+					if( Options::get( 'MetaSEO_archives_follow' ) ) {
 						$robots .= ', follow';
 					}
 					else {
@@ -502,7 +488,10 @@ class MetaSeo extends Plugin
 			switch( $rule ) {
 				case 'display_home':
 				case 'display_entries':
-					$out= Options::get( 'title' ) . ' - ' . Options::get( 'tagline' );
+					$out= Options::get( 'title' );
+					if( Options::get( 'tagline' ) ) {
+						$out .= '-' . Options::get( 'tagline' );
+					}
 					break;
 				case 'display_entries_by_date':
 					$out= 'Archive for ';
@@ -532,8 +521,10 @@ class MetaSeo extends Plugin
 					$out .= ' - ' . Options::get( 'title' );
 					break;
 				case 'display_search':
-					$out= 'Search Results for ' . $this->theme->criteria ;
-					$out .= ' - ' . Options::get( 'title' );
+					if ( isset( $_GET['criteria'] ) ) {
+						$out= 'Search Results for ' . $_GET['criteria'] . ' - ' ;
+					}
+					$out .= Options::get( 'title' );
 					break;
 				case 'display_404':
 					$out= 'Page Not Found';
