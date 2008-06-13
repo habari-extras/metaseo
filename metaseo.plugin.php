@@ -16,7 +16,7 @@ class MetaSeo extends Plugin
 	/**
 	* @var string plugin version number
 	*/
-	const VERSION= '0.4';
+	const VERSION= '0.5';
 
 	/**
 	* @var $them Theme object that is currently being use for display
@@ -166,81 +166,66 @@ class MetaSeo extends Plugin
 	}
 
 	/**
-	* function action_post_update_before
+	* Add additional controls to the publish page tab
 	*
-	* called whenever a post is updated or published . If a new html title,
+	* @param FormUI $form The form that is used on the publish page
+	* @param Post $post The post being edited
+	**/
+	public function action_form_publish($form, $post)
+	{
+		if( $post->content_type == Post::type( 'entry' ) || $post->content_type == Post::type( 'page' ) ) {
+
+			$metaseo= $form->publish_controls->append( 'fieldset', 'metaseo', 'Meta SEO' );
+
+			$html_title= $metaseo->append( 'text', 'html_title', 'null:null', 'Page Title' );
+			$html_title->value= strlen( $post->info->html_title ) ? $post->info->html_title : '' ;
+			$html_title->template = 'tabcontrol_text';
+			
+			$keywords= $metaseo->append( 'text', 'keywords', 'null:null', 'Keywords' );
+			$keywords->value= strlen( $post->info->metaseo_keywords ) ? $post->info->metaseo_keywords : '' ;
+			$keywords->template = 'tabcontrol_text';
+
+			$description= $metaseo->append( 'textarea', 'description', 'null:null', 'Description' );
+			$description->value= ( isset( $post->info->metaseo_desc ) ? $post->info->metaseo_desc : '' );
+			$$description->template = 'tabcontrol_textarea';
+		}
+	}
+
+
+	/**
+	* Modify a post before it is updated
+	*
+	* Called whenever a post is about to be updated or published . If a new html title,
 	* meta description, or meta keywords are entered on the publish page, 
 	* sove them into the postinfo table. If any of these are empty, remove
 	* their entry from the postinfo table if it exists.
 	*
-	* @param $post the Post object being updated
-	* @return nothing
+	* @param Post $post The post being saved, by reference
+	* @param FormUI $form The form that was submitted on the publish page
 	*/
-	public function action_post_update_before( $post )
+	public function action_publish_post($post, $form)
 	{
-		$vars= Controller::get_handler_vars();
-		if( $vars['content_type'] == Post::type( 'entry' ) || $vars['content_type'] == Post::type( 'page' ) ) {
-			if( strlen( $vars['html_title'] ) ) {
-				$post->info->html_title= htmlspecialchars( strip_tags( $vars['html_title'] ), ENT_COMPAT, 'UTF-8' );
+		if( $post->content_type == Post::type( 'entry' ) || $post->content_type == Post::type( 'page' ) ) {
+			if( strlen( $form->metaseo->html_title->value ) ) {
+				$post->info->html_title= htmlspecialchars( strip_tags( $form->metaseo->html_title->value ), ENT_COMPAT, 'UTF-8' );
 			}
 			else {
 				$post->info->__unset( 'html_title' );
 			}
-			if( strlen( $vars['metaseo_desc'] ) ) {
-				$post->info->metaseo_desc= htmlspecialchars( Utils::truncate( strip_tags( $vars['metaseo_desc'] ), 200, false ), ENT_COMPAT, 'UTF-8' );
+			if( strlen( $form->metaseo->description->value ) ) {
+				$post->info->metaseo_desc= htmlspecialchars( Utils::truncate( strip_tags( $form->metaseo->description->value ), 200, false ), ENT_COMPAT, 'UTF-8' );
 			}
 			else {
 				$post->info->__unset( 'metaseo_desc' );
 			}
-			if( strlen( $vars['metaseo_keywords'] ) ) {
-				$post->info->metaseo_keywords= htmlspecialchars( strip_tags( $vars['metaseo_keywords'] ), ENT_COMPAT, 'UTF-8' );
+			if( strlen( $form->metaseo->keywords->value ) ) {
+				$post->info->metaseo_keywords= htmlspecialchars( strip_tags( $form->metaseo->keywords->value ), ENT_COMPAT, 'UTF-8' );
 			}
 			else {
 				$post->info->__unset( 'metaseo_keywords' );
 			}
 		}
-	}
 
-	/**
-	* function filter_publish_controls
-	*
-	* adds controls to the publish page so we can set the html title we want on a
-	* page or entry if we don't want it to be the same as the actual page or post title
-	*
-	* @return array  containing the controls to be on the publish page
-	*/
-	public function filter_publish_controls ($controls, $post) {
-		$vars= Controller::get_handler_vars();
-				
-		if( $vars['content_type'] == Post::type('entry') || $vars['content_type'] == Post::type('page') ) {
-			$output= '';
-			
-			$output .= '<div class="text container">';
-			$output .= '<p class="column span-2"><label for="html_title">Page Title:</label></p>';
-			$output .= '<p class="column span-17 last"><input style="width: 400px;" type="text" id="page-title" name="html_title" value="';
-			if( strlen( $post->info->html_title ) ) {
-				$output .= $post->info->html_title;
-			}
-			$output .= '" /></p>';
-
-			$output .= '<p class="column span-2"><label for="metaseo_keywords">Keywords:</label></p>';
-			$output .= '<p class="column span-17 last"><input style="width: 400px;" type="text" id="metaseo_keywords" name="metaseo_keywords" value="';
-			if( strlen( $post->info->metaseo_keywords ) ) {
-				$output .= $post->info->metaseo_keywords;
-			}
-			$output .= '" /></p>';
-
-			$output .= '<p class="column span-2"><label for="meta_desc">Description:</label></p>';
-			$output .= '<p class="column span-17 last"><textarea id="metaseo_desc" name="metaseo_desc" style="height: 100px; width: 400px;" >';
-			if( strlen( $post->info->metaseo_desc ) ) {
-				$output .= $post->info->metaseo_desc;
-			}
-			$output .= '</textarea></p>';
-			$output .= '</div>';
-			$controls['Meta SEO']= $output;
-		}
-		
-		return $controls;
 	}
 
 	/**

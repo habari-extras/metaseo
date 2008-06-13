@@ -1,6 +1,6 @@
 Plugin: Meta SEO
 URL: http://habariproject.org
-Version: 0.4
+Version: 0.5
 Author: Habari Project
 
 Purpose 
@@ -48,6 +48,8 @@ Cleanup
 2. The plugin stores items in the postinfo table whenever you create a custom title, keywords, or description. These have the names 'html_title', 'metaseo_desc', and 'metaseo_keywords'. These entries can be safely deleted.
 
 Changelog
+Version 0.5
+Change: Converted Publish page fields to use Habari's built-in form controls.
 
 Version 0.4
 Change: Converted configuration dialog to use Habari's updated form system. User's of previous versions will need to deactivate MetaSEO and reactivate it for the options to be generated properly. I would also recommend that you delete the old MetaSEO options from your database.
