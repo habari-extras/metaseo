@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * Meta SEO an SEO plugin for Habari
  * 
  * @package metaseo
@@ -9,7 +9,7 @@
  * and keywords to the page header, and injects
  * indexing tags based on the preferences
  *
- **/
+ */
 
 class MetaSeo extends Plugin
 {
@@ -42,7 +42,7 @@ class MetaSeo extends Plugin
 		);
 	}
 
-	/**
+	/*
 	* function set_priorities
 	*
 	* set priority to a number lower than that used by most plugins 
@@ -58,7 +58,7 @@ class MetaSeo extends Plugin
 	  );
 	}
 
-	/**
+	/*
 	* function default_options
 	*
 	* returns defaults for the plugin
@@ -96,7 +96,7 @@ class MetaSeo extends Plugin
 		}
 	}
 
-	/**
+	/*
 	* function action_plugin_activation
 	*
 	*if the file being passed in is this file, sets the default options
@@ -114,7 +114,7 @@ class MetaSeo extends Plugin
 		}
 	}
 
-	/**
+	/*
 	 * function filter_plugin_config
 	 *
 	 * Returns  actions to be performed on configuration
@@ -131,7 +131,7 @@ class MetaSeo extends Plugin
 		return $actions;
 	}
 
-	/**
+	/*
 	* function action_plugin_ui
 	*
 	* displays the option form 
@@ -165,12 +165,12 @@ class MetaSeo extends Plugin
 		}
 	}
 
-	/**
+	/*
 	* Add additional controls to the publish page tab
 	*
 	* @param FormUI $form The form that is used on the publish page
 	* @param Post $post The post being edited
-	**/
+	*/
 	public function action_form_publish($form, $post)
 	{
 		if( $post->content_type == Post::type( 'entry' ) || $post->content_type == Post::type( 'page' ) ) {
@@ -192,7 +192,7 @@ class MetaSeo extends Plugin
 	}
 
 
-	/**
+	/*
 	* Modify a post before it is updated
 	*
 	* Called whenever a post is about to be updated or published . If a new html title,
@@ -228,7 +228,7 @@ class MetaSeo extends Plugin
 
 	}
 
-	/**
+	/*
 	* function filter_final_output
 	*
 	* this filter is called before the display of any page, so it is used 
@@ -251,7 +251,7 @@ class MetaSeo extends Plugin
 		return $buffer;
 	}
 
-	/**
+	/*
 	* function theme_header
 	*
 	* called to added output to the head of a page before it is being displayed.
@@ -267,7 +267,7 @@ class MetaSeo extends Plugin
 		return $this->get_keywords() . $this->get_description() . $this->get_robots();
 	}
 
-	/**
+	/*
 	* function action_update_check
 	*
 	* Add update beacon support
@@ -333,7 +333,7 @@ class MetaSeo extends Plugin
 		return $out;
 	}
 
-	/**
+	/*
 	 * function get_keywords
 	 *
 	 * This function creates the meta keywords tag based on the type of page being loaded.
@@ -382,7 +382,7 @@ class MetaSeo extends Plugin
 		return $out;
 	}
 
-	/**
+	/*
 	 * function get_robots
 	 *
 	 * creates the robots tag based on the type of page being loaded.
@@ -455,7 +455,7 @@ class MetaSeo extends Plugin
 		return $out;
 	}
 
-	/**
+	/*
 	* function get_title
 	* 
 	* creates the html title for the page being displayed
@@ -527,5 +527,4 @@ class MetaSeo extends Plugin
 	}
 
 }
-
 ?>
