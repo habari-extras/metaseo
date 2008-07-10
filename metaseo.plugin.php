@@ -245,7 +245,7 @@ class MetaSeo extends Plugin
 				$buffer= preg_replace("%<title\b[^>]*>(.*?)</title>%is", "<title>{$seo_title}</title>", $buffer );
 			}
 			else {
-				$buffer= preg_replace("%<head>%is", "<head>\n<title>{$seo_title}</title>", $buffer );
+				$buffer= preg_replace("%</head>%is", "<title>{$seo_title}</title>\n</head>", $buffer );
 			}
 		}
 		return $buffer;
@@ -327,6 +327,7 @@ class MetaSeo extends Plugin
 			$desc= str_replace( "\r\n", " ", $desc );
 			$desc= str_replace( "\n", " ", $desc );
 			$desc= htmlspecialchars( strip_tags( $desc ), ENT_COMPAT, 'UTF-8' );
+			$desc= strip_tags( $desc );
 			$out= "<meta name=\"description\" content=\"{$desc}\" >\n";
 		}
 
