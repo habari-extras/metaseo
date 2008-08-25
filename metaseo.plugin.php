@@ -187,7 +187,7 @@ class MetaSeo extends Plugin
 
 			$description= $metaseo->append( 'textarea', 'description', 'null:null', 'Description' );
 			$description->value= ( isset( $post->info->metaseo_desc ) ? $post->info->metaseo_desc : '' );
-			$$description->template = 'tabcontrol_textarea';
+			$description->template = 'tabcontrol_textarea';
 		}
 	}
 
