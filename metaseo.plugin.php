@@ -16,7 +16,7 @@ class MetaSeo extends Plugin
 	/**
 	* @var string plugin version number
 	*/
-	const VERSION= '0.5';
+	const VERSION = '0.5';
 
 	/**
 	* @var $them Theme object that is currently being use for display
@@ -66,8 +66,8 @@ class MetaSeo extends Plugin
 	*/
 	private static function default_options()
 	{
-		$home_keys= array();
-		$tags= Tags::get();
+		$home_keys = array();
+		$tags = Tags::get();
 		foreach( $tags as $tag ) {
 			// limit to the first 50 tags to prevent keyword stuffing
 			if( count( $home_keys ) < 50 ) {
@@ -90,7 +90,7 @@ class MetaSeo extends Plugin
 	}
 
 	public function action_admin_header( $theme ) {
-		$vars= Controller::get_handler_vars();
+		$vars = Controller::get_handler_vars();
 		if ($theme->admin_page == 'plugins' && isset( $vars['configure'] ) && $vars['configure'] === $this->plugin_id ) {
 			Stack::add('admin_stylesheet', array($this->get_url() . '/metaseo.css', 'screen'));
 		}
@@ -143,7 +143,7 @@ class MetaSeo extends Plugin
 		if ( $plugin_id == $this->plugin_id() ) {
 			switch ( $action ) {
 				case _t('Configure' ) :
-					$ui= new FormUI( 'MetaSEO' );
+					$ui = new FormUI( 'MetaSEO' );
 					// Add a text control for the home page description and textmultis for the home page keywords
 					$ui->append( 'fieldset', 'HomePage', _t( 'HomePage' ) );
 					$ui->HomePage->append( 'textarea', 'home_desc', 'option:MetaSEO__home_desc', _t('Description: ' ) );
@@ -175,18 +175,18 @@ class MetaSeo extends Plugin
 	{
 		if( $post->content_type == Post::type( 'entry' ) || $post->content_type == Post::type( 'page' ) ) {
 
-			$metaseo= $form->publish_controls->append( 'fieldset', 'metaseo', 'Meta SEO' );
+			$metaseo = $form->publish_controls->append( 'fieldset', 'metaseo', 'Meta SEO' );
 
-			$html_title= $metaseo->append( 'text', 'html_title', 'null:null', 'Page Title' );
-			$html_title->value= strlen( $post->info->html_title ) ? $post->info->html_title : '' ;
+			$html_title = $metaseo->append( 'text', 'html_title', 'null:null', 'Page Title' );
+			$html_title->value = strlen( $post->info->html_title ) ? $post->info->html_title : '' ;
 			$html_title->template = 'tabcontrol_text';
 			
-			$keywords= $metaseo->append( 'text', 'keywords', 'null:null', 'Keywords' );
-			$keywords->value= strlen( $post->info->metaseo_keywords ) ? $post->info->metaseo_keywords : '' ;
+			$keywords = $metaseo->append( 'text', 'keywords', 'null:null', 'Keywords' );
+			$keywords->value = strlen( $post->info->metaseo_keywords ) ? $post->info->metaseo_keywords : '' ;
 			$keywords->template = 'tabcontrol_text';
 
-			$description= $metaseo->append( 'textarea', 'description', 'null:null', 'Description' );
-			$description->value= ( isset( $post->info->metaseo_desc ) ? $post->info->metaseo_desc : '' );
+			$description = $metaseo->append( 'textarea', 'description', 'null:null', 'Description' );
+			$description->value = ( isset( $post->info->metaseo_desc ) ? $post->info->metaseo_desc : '' );
 			$description->template = 'tabcontrol_textarea';
 		}
 	}
@@ -207,19 +207,19 @@ class MetaSeo extends Plugin
 	{
 		if( $post->content_type == Post::type( 'entry' ) || $post->content_type == Post::type( 'page' ) ) {
 			if( strlen( $form->metaseo->html_title->value ) ) {
-				$post->info->html_title= htmlspecialchars( strip_tags( $form->metaseo->html_title->value ), ENT_COMPAT, 'UTF-8' );
+				$post->info->html_title = htmlspecialchars( strip_tags( $form->metaseo->html_title->value ), ENT_COMPAT, 'UTF-8' );
 			}
 			else {
 				$post->info->__unset( 'html_title' );
 			}
 			if( strlen( $form->metaseo->description->value ) ) {
-				$post->info->metaseo_desc= htmlspecialchars( Utils::truncate( strip_tags( $form->metaseo->description->value ), 200, false ), ENT_COMPAT, 'UTF-8' );
+				$post->info->metaseo_desc = htmlspecialchars( Utils::truncate( strip_tags( $form->metaseo->description->value ), 200, false ), ENT_COMPAT, 'UTF-8' );
 			}
 			else {
 				$post->info->__unset( 'metaseo_desc' );
 			}
 			if( strlen( $form->metaseo->keywords->value ) ) {
-				$post->info->metaseo_keywords= htmlspecialchars( strip_tags( $form->metaseo->keywords->value ), ENT_COMPAT, 'UTF-8' );
+				$post->info->metaseo_keywords = htmlspecialchars( strip_tags( $form->metaseo->keywords->value ), ENT_COMPAT, 'UTF-8' );
 			}
 			else {
 				$post->info->__unset( 'metaseo_keywords' );
@@ -239,13 +239,13 @@ class MetaSeo extends Plugin
 	*/
 	public function filter_final_output( $buffer )
 	{
-		$seo_title= $this->get_title();
+		$seo_title = $this->get_title();
 		if( strlen( $seo_title ) ) {
 			if( strpos( $buffer, '<title>' ) !== false ) {
-				$buffer= preg_replace("%<title\b[^>]*>(.*?)</title>%is", "<title>{$seo_title}</title>", $buffer );
+				$buffer = preg_replace("%<title\b[^>]*>(.*?)</title>%is", "<title>{$seo_title}</title>", $buffer );
 			}
 			else {
-				$buffer= preg_replace("%</head>%is", "<title>{$seo_title}</title>\n</head>", $buffer );
+				$buffer = preg_replace("%</head>%is", "<title>{$seo_title}</title>\n</head>", $buffer );
 			}
 		}
 		return $buffer;
@@ -263,7 +263,7 @@ class MetaSeo extends Plugin
 	*/
 	public function theme_header($theme)
 	{
-		$this->theme= $theme;
+		$this->theme = $theme;
 		return $this->get_keywords() . $this->get_description() . $this->get_robots();
 	}
 
@@ -298,25 +298,25 @@ class MetaSeo extends Plugin
 	*/
 	private function get_description()
 	{
-		$out= '';
-		$desc= '';
+		$out = '';
+		$desc = '';
 		
-		$matched_rule= URL::get_matched_rule();
+		$matched_rule = URL::get_matched_rule();
 		
 		if ( is_object( $matched_rule ) ) {
-			$rule= $matched_rule->name;
+			$rule = $matched_rule->name;
 			switch( $rule) {
 				case 'display_home':
-					$desc= Options::get( 'MetaSEO__home_desc' );
+					$desc = Options::get( 'MetaSEO__home_desc' );
 					break;
 				case 'display_entry':
 				case 'display_page':
 					if( isset( $this->theme->post ) ) {
 						if( strlen( $this->theme->post->info->metaseo_desc ) ) {
-							$desc= $this->theme->post->info->metaseo_desc;
+							$desc = $this->theme->post->info->metaseo_desc;
 						}
 						else {
-							$desc= Utils::truncate( $this->theme->post->content, 200, false );
+							$desc = Utils::truncate( $this->theme->post->content, 200, false );
 						}
 					}
 					break;
@@ -324,11 +324,11 @@ class MetaSeo extends Plugin
 			}
 		}
 		if( strlen( $desc ) ) {
-			$desc= str_replace( "\r\n", " ", $desc );
-			$desc= str_replace( "\n", " ", $desc );
-			$desc= htmlspecialchars( strip_tags( $desc ), ENT_COMPAT, 'UTF-8' );
-			$desc= strip_tags( $desc );
-			$out= "<meta name=\"description\" content=\"{$desc}\" >\n";
+			$desc = str_replace( "\r\n", " ", $desc );
+			$desc = str_replace( "\n", " ", $desc );
+			$desc = htmlspecialchars( strip_tags( $desc ), ENT_COMPAT, 'UTF-8' );
+			$desc = strip_tags( $desc );
+			$out = "<meta name=\"description\" content=\"{$desc}\" >\n";
 		}
 
 		return $out;
@@ -346,39 +346,39 @@ class MetaSeo extends Plugin
 	*/
 	private function get_keywords()
 	{
-		$out= '';
-		$keywords= '';
+		$out = '';
+		$keywords = '';
 		
-		$matched_rule= URL::get_matched_rule();
+		$matched_rule = URL::get_matched_rule();
 		
 		if ( is_object( $matched_rule ) ) {
-			$rule= $matched_rule->name;
+			$rule = $matched_rule->name;
 			switch( $rule) {
 				case 'display_entry':
 				case 'display_page':
 					if( isset( $this->theme->post ) ) {
 						if( strlen( $this->theme->post->info->metaseo_keywords ) ) {
-							$keywords= $this->theme->post->info->metaseo_keywords;
+							$keywords = $this->theme->post->info->metaseo_keywords;
 						}
 						else if( count( $this->theme->post->tags ) > 0 ) {
-							$keywords= implode( ', ', $this->theme->post->tags );
+							$keywords = implode( ', ', $this->theme->post->tags );
 						}
 					}
 					break;
 				case 'display_entries_by_tag':
-					$keywords= Controller::get_var( 'tag' );
+					$keywords = Controller::get_var( 'tag' );
 					break;
 				case 'display_home':
 					if( count( Options::get( 'MetaSEO__home_keywords' ) ) ) {
-						$keywords= implode( ', ', Options::get( 'MetaSEO__home_keywords' ) );
+						$keywords = implode( ', ', Options::get( 'MetaSEO__home_keywords' ) );
 					}
 					break;
 				default:
 			}
 		}
-		$keywords= htmlspecialchars( strip_tags( $keywords ), ENT_COMPAT, 'UTF-8' );
+		$keywords = htmlspecialchars( strip_tags( $keywords ), ENT_COMPAT, 'UTF-8' );
 		if( strlen( $keywords ) ) {
-			$out= "<meta name=\"keywords\" content=\"{$keywords}\">\n";
+			$out = "<meta name=\"keywords\" content=\"{$keywords}\">\n";
 		}
 		return $out;
 	}
@@ -392,21 +392,21 @@ class MetaSeo extends Plugin
 	*/
 	private function get_robots()
 	{
-		$out= '';
-		$robots= '';
+		$out = '';
+		$robots = '';
 		
-		$matched_rule= URL::get_matched_rule();
+		$matched_rule = URL::get_matched_rule();
 
 		if ( is_object( $matched_rule ) ) {
-			$rule= $matched_rule->name;
+			$rule = $matched_rule->name;
 			switch( $rule) {
 				case 'display_entry':
 				case 'display_page':
 					if( Options::get( 'MetaSEO__posts_index' ) ) {
-						$robots= 'index';
+						$robots = 'index';
 					}
 					else {
-						$robots= 'noindex';
+						$robots = 'noindex';
 					}
 					if( Options::get( 'MetaSEO__posts_follow' ) ) {
 						$robots .= ', follow';
@@ -417,10 +417,10 @@ class MetaSeo extends Plugin
 					break;
 				case 'display_home':
 					if( Options::get( 'MetaSEO__home_index' ) ) {
-						$robots= 'index';
+						$robots = 'index';
 					}
 					else {
-						$robots= 'noindex';
+						$robots = 'noindex';
 					}
 					if( Options::get( 'MetaSEO__home_follow' ) ) {
 						$robots .= ', follow';
@@ -433,10 +433,10 @@ class MetaSeo extends Plugin
 				case 'display_entries_by_date':
 				case 'display_entries':
 					if( Options::get( 'MetaSEO__archives_index' ) ) {
-						$robots= 'index';
+						$robots = 'index';
 					}
 					else {
-						$robots= 'noindex';
+						$robots = 'noindex';
 					}
 					if( Options::get( 'MetaSEO__archives_follow' ) ) {
 						$robots .= ', follow';
@@ -446,12 +446,12 @@ class MetaSeo extends Plugin
 					}
 					break;
 				default:
-					$robots= 'noindex, follow';
+					$robots = 'noindex, follow';
 					break;
 			}
 		}
 		if( strlen( $robots ) ) {
-			$out= "<meta name=\"robots\" content=\"{$robots}\" >\n";
+			$out = "<meta name=\"robots\" content=\"{$robots}\" >\n";
 		}
 		return $out;
 	}
@@ -465,22 +465,22 @@ class MetaSeo extends Plugin
 	*/
 	private function get_title()
 	{
-		$months= array('01'=>'January', '02'=>'February', '03'=>'March', '04'=>'April', '05'=>'May', '06'=>'June', '07'=>'July', '08'=>'August', '09'=>'September', '10'=>'October', '11'=>'November', '12'=>'December');
-		$out= '';
+		$months = array('01'=>'January', '02'=>'February', '03'=>'March', '04'=>'April', '05'=>'May', '06'=>'June', '07'=>'July', '08'=>'August', '09'=>'September', '10'=>'October', '11'=>'November', '12'=>'December');
+		$out = '';
 
-		$matched_rule= URL::get_matched_rule();
+		$matched_rule = URL::get_matched_rule();
 		if (is_object( $matched_rule ) ) {
-			$rule= $matched_rule->name;
+			$rule = $matched_rule->name;
 			switch( $rule ) {
 				case 'display_home':
 				case 'display_entries':
-					$out= Options::get( 'title' );
+					$out = Options::get( 'title' );
 					if( Options::get( 'tagline' ) ) {
 						$out .= '-' . Options::get( 'tagline' );
 					}
 					break;
 				case 'display_entries_by_date':
-					$out= 'Archive for ';
+					$out = 'Archive for ';
 					if( isset($this->theme->day) ) {
 						$out .= $this->theme->day . ' ';
 					}
@@ -493,34 +493,34 @@ class MetaSeo extends Plugin
 					$out .= ' - ' . Options::get( 'title' );
 					break;
 				case 'display_entries_by_tag':
-					$out= $this->get_tag_text(Controller::get_var( 'tag' ) ) . ' Archive';
+					$out = $this->get_tag_text(Controller::get_var( 'tag' ) ) . ' Archive';
 					$out .= ' - ' . Options::get( 'title' );
 					break;
 				case 'display_entry':
 				case 'display_page':
 					if( strlen( $this->theme->post->info->html_title ) ) {
-						$out= $this->theme->post->info->html_title;
+						$out = $this->theme->post->info->html_title;
 					}
 					else {
-						$out= $this->theme->post->title;
+						$out = $this->theme->post->title;
 					}
 					$out .= ' - ' . Options::get( 'title' );
 					break;
 				case 'display_search':
 					if ( isset( $_GET['criteria'] ) ) {
-						$out= 'Search Results for ' . $_GET['criteria'] . ' - ' ;
+						$out = 'Search Results for ' . $_GET['criteria'] . ' - ' ;
 					}
 					$out .= Options::get( 'title' );
 					break;
 				case 'display_404':
-					$out= 'Page Not Found';
+					$out = 'Page Not Found';
 					$out .= ' - ' . Options::get( 'title' );
 					break;
 			}
 
 			if( strlen( $out ) ) {
-				$out= htmlspecialchars( strip_tags( $out ), ENT_COMPAT, 'UTF-8' );
-				$out= stripslashes( $out );
+				$out = htmlspecialchars( strip_tags( $out ), ENT_COMPAT, 'UTF-8' );
+				$out = stripslashes( $out );
 			}
 		}
 
