@@ -48,6 +48,12 @@ Cleanup
 2. The plugin stores items in the postinfo table whenever you create a custom title, keywords, or description. These have the names 'html_title', 'metaseo_desc', and 'metaseo_keywords'. These entries can be safely deleted.
 
 Changelog
+Version 0.5.2
+Fixed: Made changes to accomodate Habari changes regarding input variable handling
+
+Version 0.5.1
+Fixed: Made changes to accomodate Habari variable name changes.
+
 Version 0.5
 Change: Converted Publish page fields to use Habari's built-in form controls.
 

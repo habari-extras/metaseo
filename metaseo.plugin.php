@@ -16,7 +16,7 @@ class MetaSeo extends Plugin
 	/**
 	* @var string plugin version number
 	*/
-	const VERSION = '0.5';
+	const VERSION= '0.5.2';
 
 	/**
 	* @var $them Theme object that is currently being use for display
@@ -71,7 +71,7 @@ class MetaSeo extends Plugin
 		foreach( $tags as $tag ) {
 			// limit to the first 50 tags to prevent keyword stuffing
 			if( count( $home_keys ) < 50 ) {
-				$home_keys[]= htmlspecialchars( strip_tags( $tag->tag ), ENT_COMPAT, 'UTF-8' );
+				$home_keys[] = htmlspecialchars( strip_tags( $tag->tag ), ENT_COMPAT, 'UTF-8' );
 			}
 			else {
 				break;
@@ -90,7 +90,7 @@ class MetaSeo extends Plugin
 	}
 
 	public function action_admin_header( $theme ) {
-		$vars = Controller::get_handler_vars();
+		$vars= Controller::get_handler_vars();
 		if ($theme->admin_page == 'plugins' && isset( $vars['configure'] ) && $vars['configure'] === $this->plugin_id ) {
 			Stack::add('admin_stylesheet', array($this->get_url() . '/metaseo.css', 'screen'));
 		}
@@ -107,7 +107,7 @@ class MetaSeo extends Plugin
 	{
 		if ( realpath( $file ) == __FILE__ ) {
 			foreach ( self::default_options() as $name => $value ) {
-				if( !(Options::get( 'MetaSEO__' . $name ) ) ) {
+				if( !( Options::get( 'MetaSEO__' . $name ) ) ) {
 					Options::set( 'MetaSEO__' . $name, $value );
 				}
 			}
@@ -126,7 +126,7 @@ class MetaSeo extends Plugin
 	public function filter_plugin_config( $actions, $plugin_id )
 	{
 		if ( $plugin_id == $this->plugin_id() ) {
-			$actions[]= _t('Configure' );
+			$actions[] = _t('Configure' );
 		}
 		return $actions;
 	}
@@ -142,7 +142,7 @@ class MetaSeo extends Plugin
 	{
 		if ( $plugin_id == $this->plugin_id() ) {
 			switch ( $action ) {
-				case _t('Configure' ) :
+				case _t( 'Configure' ) :
 					$ui = new FormUI( 'MetaSEO' );
 					// Add a text control for the home page description and textmultis for the home page keywords
 					$ui->append( 'fieldset', 'HomePage', _t( 'HomePage' ) );
@@ -173,7 +173,7 @@ class MetaSeo extends Plugin
 	*/
 	public function action_form_publish($form, $post)
 	{
-		if( $post->content_type == Post::type( 'entry' ) || $post->content_type == Post::type( 'page' ) ) {
+		if( $form->content_type->value == Post::type( 'entry' ) || $form->content_type->value == Post::type( 'page' ) ) {
 
 			$metaseo = $form->publish_controls->append( 'fieldset', 'metaseo', 'Meta SEO' );
 
@@ -207,13 +207,13 @@ class MetaSeo extends Plugin
 	{
 		if( $post->content_type == Post::type( 'entry' ) || $post->content_type == Post::type( 'page' ) ) {
 			if( strlen( $form->metaseo->html_title->value ) ) {
-				$post->info->html_title = htmlspecialchars( strip_tags( $form->metaseo->html_title->value ), ENT_COMPAT, 'UTF-8' );
+				$post->info->html_title= htmlspecialchars( strip_tags( $form->metaseo->html_title->value ), ENT_COMPAT, 'UTF-8' );
 			}
 			else {
 				$post->info->__unset( 'html_title' );
 			}
 			if( strlen( $form->metaseo->description->value ) ) {
-				$post->info->metaseo_desc = htmlspecialchars( Utils::truncate( strip_tags( $form->metaseo->description->value ), 200, false ), ENT_COMPAT, 'UTF-8' );
+				$post->info->metaseo_desc= htmlspecialchars( Utils::truncate( strip_tags( $form->metaseo->description->value ), 200, false ), ENT_COMPAT, 'UTF-8' );
 			}
 			else {
 				$post->info->__unset( 'metaseo_desc' );
@@ -242,7 +242,7 @@ class MetaSeo extends Plugin
 		$seo_title = $this->get_title();
 		if( strlen( $seo_title ) ) {
 			if( strpos( $buffer, '<title>' ) !== false ) {
-				$buffer = preg_replace("%<title\b[^>]*>(.*?)</title>%is", "<title>{$seo_title}</title>", $buffer );
+				$buffer = preg_replace( "%<title\b[^>]*>(.*?)</title>%is", "<title>{$seo_title}</title>", $buffer );
 			}
 			else {
 				$buffer = preg_replace("%</head>%is", "<title>{$seo_title}</title>\n</head>", $buffer );
@@ -370,7 +370,7 @@ class MetaSeo extends Plugin
 					break;
 				case 'display_home':
 					if( count( Options::get( 'MetaSEO__home_keywords' ) ) ) {
-						$keywords = implode( ', ', Options::get( 'MetaSEO__home_keywords' ) );
+						$keywords= implode( ', ', Options::get( 'MetaSEO__home_keywords' ) );
 					}
 					break;
 				default:
@@ -417,7 +417,7 @@ class MetaSeo extends Plugin
 					break;
 				case 'display_home':
 					if( Options::get( 'MetaSEO__home_index' ) ) {
-						$robots = 'index';
+						$robots= 'index';
 					}
 					else {
 						$robots = 'noindex';
@@ -465,7 +465,20 @@ class MetaSeo extends Plugin
 	*/
 	private function get_title()
 	{
-		$months = array('01'=>'January', '02'=>'February', '03'=>'March', '04'=>'April', '05'=>'May', '06'=>'June', '07'=>'July', '08'=>'August', '09'=>'September', '10'=>'October', '11'=>'November', '12'=>'December');
+		$months= array(
+			1 =>'January', 
+			'February', 
+			'March', 
+			'April', 
+			'May', 
+			'June', 
+			'July', 
+			'August', 
+			'September', 
+			'October', 
+			'November', 
+			'December', 
+		);
 		$out = '';
 
 		$matched_rule = URL::get_matched_rule();
@@ -481,10 +494,10 @@ class MetaSeo extends Plugin
 					break;
 				case 'display_entries_by_date':
 					$out = 'Archive for ';
-					if( isset($this->theme->day) ) {
+					if( isset( $this->theme->day ) ) {
 						$out .= $this->theme->day . ' ';
 					}
-					if( isset($this->theme->month) ) {
+					if( isset( $this->theme->month ) ) {
 						$out .= $months[$this->theme->month] . ' ';
 					}
 					if (isset( $this->theme->year) ) {
