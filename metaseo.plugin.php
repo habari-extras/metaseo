@@ -67,16 +67,22 @@ class MetaSeo extends Plugin
 	private static function default_options()
 	{
 		$home_keys = array();
-		$tags = Tags::get();
-		foreach( $tags as $tag ) {
-			// limit to the first 50 tags to prevent keyword stuffing
-			if( count( $home_keys ) < 50 ) {
-				$home_keys[] = htmlspecialchars( strip_tags( $tag->tag ), ENT_COMPAT, 'UTF-8' );
-			}
-			else {
-				break;
-			}
+		
+		// this is from the Tags::get() method, altered to return only the top ones
+		$tags = DB::get_results( 'SELECT t.id AS id,
+			t.tag_text AS tag,
+			t.tag_slug AS slug,
+			COUNT(tp.tag_id) AS count
+			FROM {tags} t
+			LEFT JOIN {tag2post} tp ON t.id=tp.tag_id
+			GROUP BY id, tag, slug
+			ORDER BY count DESC, tag ASC
+			LIMIT 0, 50' );
+			
+		foreach ( $tags as $tag ) {
+			$home_keys[] = htmlspecialchars( strip_tags( $tag->tag ), ENT_COMPAT, 'UTF-8' );
 		}
+		
 		return array(
 			'home_desc' => htmlspecialchars( strip_tags( Options::get( 'tagline' ) ), ENT_COMPAT, 'UTF-8' ),
 			'home_keywords' => $home_keys,
@@ -126,6 +132,7 @@ class MetaSeo extends Plugin
 	public function filter_plugin_config( $actions, $plugin_id )
 	{
 		if ( $plugin_id == $this->plugin_id() ) {
+			$actions[] = _t( 'Re-Load Top Keywords' );
 			$actions[] = _t('Configure' );
 		}
 		return $actions;
@@ -142,6 +149,17 @@ class MetaSeo extends Plugin
 	{
 		if ( $plugin_id == $this->plugin_id() ) {
 			switch ( $action ) {
+				case _t( 'Re-Load Top Keywords' ):
+					
+					// get the keywords
+					$options = self::default_options();
+					$keywords = $options['home_keywords'];
+					
+					Options::set( 'MetaSEO__home_keywords', $keywords );
+					
+					Session::notice( _t( 'Keywords have been reloaded!' ) );
+					
+					break;
 				case _t( 'Configure' ) :
 					$ui = new FormUI( 'MetaSEO' );
 					// Add a text control for the home page description and textmultis for the home page keywords
