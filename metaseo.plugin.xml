@@ -1,0 +1,9 @@
+<plugin>
+	<name>Meta SEO</name>
+	<url>http://habariproject.org</url>
+	<author>Habari Community</author>
+	<authorurl>http://habariproject.org</authorurl>
+	<license>Apache License 2.0</license>
+	<description>Adds search engine optimizations to the page head</description>
+</plugin>
+
