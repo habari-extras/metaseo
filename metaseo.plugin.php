@@ -507,7 +507,7 @@ class MetaSeo extends Plugin
 				case 'display_entries':
 					$out = Options::get( 'title' );
 					if( Options::get( 'tagline' ) ) {
-						$out .= '-' . Options::get( 'tagline' );
+						$out .= ' - ' . Options::get( 'tagline' );
 					}
 					break;
 				case 'display_entries_by_date':
