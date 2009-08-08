@@ -23,25 +23,6 @@ class MetaSeo extends Plugin
 	*/
 	private $theme;
 
-	/**
-	 * function info
-	 *
-	 * Returns information about this plugin
-	 * @return array Plugin info array
-	*/
-	function info()
-	{
-		return array(
-		'name' => 'Meta SEO',
-		'version' => self::VERSION,
-		'url' => 'http://habariproject.org',
-		'author' => 'Habari Community',
-		'authorurl' => 'http://habariproject.org',
-		'license' => 'Apache License 2.0',
-		'description' => 'Adds search engine optimizations to the page head',
-		);
-	}
-
 	/*
 	* function set_priorities
 	*
