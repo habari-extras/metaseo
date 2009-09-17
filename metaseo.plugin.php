@@ -23,6 +23,11 @@ class MetaSeo extends Plugin
 	*/
 	private $theme;
 
+	public function action_init()
+	{
+		$this->load_text_domain( 'metaseo' );
+	}
+
 	/*
 	* function set_priorities
 	*
@@ -113,8 +118,8 @@ class MetaSeo extends Plugin
 	public function filter_plugin_config( $actions, $plugin_id )
 	{
 		if ( $plugin_id == $this->plugin_id() ) {
-			$actions[] = _t( 'Re-Load Top Keywords' );
-			$actions[] = _t('Configure' );
+			$actions[] = _t( 'Re-Load Top Keywords', 'metaseo' );
+			$actions[] = _t('Configure', 'metaseo' );
 		}
 		return $actions;
 	}
@@ -130,7 +135,7 @@ class MetaSeo extends Plugin
 	{
 		if ( $plugin_id == $this->plugin_id() ) {
 			switch ( $action ) {
-				case _t( 'Re-Load Top Keywords' ):
+				case _t( 'Re-Load Top Keywords', 'metaseo' ):
 					
 					// get the keywords
 					$options = self::default_options();
@@ -138,26 +143,26 @@ class MetaSeo extends Plugin
 					
 					Options::set( 'MetaSEO__home_keywords', $keywords );
 					
-					Session::notice( _t( 'Keywords have been reloaded!' ) );
+					Session::notice( _t( 'Keywords have been reloaded!', 'metaseo' ) );
 					
 					break;
-				case _t( 'Configure' ) :
+				case _t( 'Configure', 'metaseo' ) :
 					$ui = new FormUI( 'MetaSEO' );
 					// Add a text control for the home page description and textmultis for the home page keywords
-					$ui->append( 'fieldset', 'HomePage', _t( 'HomePage' ) );
-					$ui->HomePage->append( 'textarea', 'home_desc', 'option:MetaSEO__home_desc', _t('Description: ' ) );
-					$ui->HomePage->append( 'textmulti', 'home_keywords', 'option:MetaSEO__home_keywords', _t( 'Keywords: ' ) );
+					$ui->append( 'fieldset', 'HomePage', _t( 'HomePage', 'metaseo' ) );
+					$ui->HomePage->append( 'textarea', 'home_desc', 'option:MetaSEO__home_desc', _t('Description: ', 'metaseo' ) );
+					$ui->HomePage->append( 'textmulti', 'home_keywords', 'option:MetaSEO__home_keywords', _t( 'Keywords: ', 'metaseo' ) );
 					
 					// Add checkboxes for the indexing and link following options
-					$ui->append( 'fieldset', 'Robots', _t( 'Robots' ) );
-					$ui->Robots->append( 'checkbox', 'home_index', 'option:MetaSEO__home_index', _t( 'Index Home Page') );
-					$ui->Robots->append( 'checkbox', 'home_follow', 'option:MetaSEO__home_follow', _t( 'Follow Home Page Links' )  );
-					$ui->Robots->append( 'checkbox', 'posts_index', 'option:MetaSEO__posts_index', _t( 'Index Posts' ) );
-					$ui->Robots->append( 'checkbox', 'posts_follow', 'option:MetaSEO__posts_follow', _t( 'Follow Post Links' ) );
-					$ui->Robots->append( 'checkbox', 'archives_index', 'option:MetaSEO__archives_index', _t( 'Index Archives' ) );
-					$ui->Robots->append( 'checkbox', 'archives_follow', 'option:MetaSEO__archives_follow', _t( 'Follow Archive Links' ) );
+					$ui->append( 'fieldset', 'Robots', _t( 'Robots', 'metaseo' ) );
+					$ui->Robots->append( 'checkbox', 'home_index', 'option:MetaSEO__home_index', _t( 'Index Home Page', 'metaseo' ) );
+					$ui->Robots->append( 'checkbox', 'home_follow', 'option:MetaSEO__home_follow', _t( 'Follow Home Page Links', 'metaseo' )  );
+					$ui->Robots->append( 'checkbox', 'posts_index', 'option:MetaSEO__posts_index', _t( 'Index Posts', 'metaseo' ) );
+					$ui->Robots->append( 'checkbox', 'posts_follow', 'option:MetaSEO__posts_follow', _t( 'Follow Post Links', 'metaseo' ) );
+					$ui->Robots->append( 'checkbox', 'archives_index', 'option:MetaSEO__archives_index', _t( 'Index Archives', 'metaseo' ) );
+					$ui->Robots->append( 'checkbox', 'archives_follow', 'option:MetaSEO__archives_follow', _t( 'Follow Archive Links', 'metaseo' ) );
 					
-					$ui->append( 'submit', 'save', _t( 'Save' ) );
+					$ui->append( 'submit', 'save', _t( 'Save', 'metaseo' ) );
 					$ui->out();
 					break;
 			}
@@ -174,17 +179,17 @@ class MetaSeo extends Plugin
 	{
 		if( $form->content_type->value == Post::type( 'entry' ) || $form->content_type->value == Post::type( 'page' ) ) {
 
-			$metaseo = $form->publish_controls->append( 'fieldset', 'metaseo', 'Meta SEO' );
+			$metaseo = $form->publish_controls->append( 'fieldset', 'metaseo', _t( 'Meta SEO', 'metaseo' ) );
 
-			$html_title = $metaseo->append( 'text', 'html_title', 'null:null', 'Page Title' );
+			$html_title = $metaseo->append( 'text', 'html_title', 'null:null', _t( 'Page Title', 'metaseo' ) );
 			$html_title->value = strlen( $post->info->html_title ) ? $post->info->html_title : '' ;
 			$html_title->template = 'tabcontrol_text';
 			
-			$keywords = $metaseo->append( 'text', 'keywords', 'null:null', 'Keywords' );
+			$keywords = $metaseo->append( 'text', 'keywords', 'null:null', _t( 'Keywords', 'metaseo' ) );
 			$keywords->value = strlen( $post->info->metaseo_keywords ) ? $post->info->metaseo_keywords : '' ;
 			$keywords->template = 'tabcontrol_text';
 
-			$description = $metaseo->append( 'textarea', 'description', 'null:null', 'Description' );
+			$description = $metaseo->append( 'textarea', 'description', 'null:null', _t( 'Description', 'metaseo' ) );
 			$description->value = ( isset( $post->info->metaseo_desc ) ? $post->info->metaseo_desc : '' );
 			$description->template = 'tabcontrol_textarea';
 		}
@@ -465,18 +470,18 @@ class MetaSeo extends Plugin
 	private function get_title()
 	{
 		$months= array(
-			1 =>'January', 
-			'February', 
-			'March', 
-			'April', 
-			'May', 
-			'June', 
-			'July', 
-			'August', 
-			'September', 
-			'October', 
-			'November', 
-			'December', 
+			1 => _t( 'January', 'metaseo' ),
+			_t( 'February', 'metaseo' ),
+			_t( 'March', 'metaseo' ),
+			_t( 'April', 'metaseo' ),
+			_t( 'May', 'metaseo' ),
+			_t( 'June', 'metaseo' ),
+			_t( 'July', 'metaseo' ),
+			_t( 'August', 'metaseo' ),
+			_t( 'September', 'metaseo' ),
+			_t( 'October', 'metaseo' ),
+			_t( 'November', 'metaseo' ),
+			_t( 'December', 'metaseo' ),
 		);
 		$out = '';
 

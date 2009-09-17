@@ -1,0 +1,137 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Meta SEO\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-09-17 09:37-0500\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Rick Cockrum <rickcockrum@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: c:/web/htdocs/www/user/\n"
+"X-Poedit-KeywordsList: _t;_e;_n:1,2;_ne:1,2\n"
+"X-Poedit-SearchPath-0: plugins/metaseo\n"
+
+#: plugins/metaseo/metaseo.plugin.php:121
+#: plugins/metaseo/metaseo.plugin.php:138
+msgid "Re-Load Top Keywords"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:122
+#: plugins/metaseo/metaseo.plugin.php:149
+msgid "Configure"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:146
+msgid "Keywords have been reloaded!"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:152
+msgid "HomePage"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:153
+msgid "Description: "
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:154
+msgid "Keywords: "
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:157
+msgid "Robots"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:158
+msgid "Index Home Page"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:159
+msgid "Follow Home Page Links"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:160
+msgid "Index Posts"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:161
+msgid "Follow Post Links"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:162
+msgid "Index Archives"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:163
+msgid "Follow Archive Links"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:165
+msgid "Save"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:182
+msgid "Meta SEO"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:184
+msgid "Page Title"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:188
+msgid "Keywords"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:192
+msgid "Description"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:473
+msgid "January"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:474
+msgid "February"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:475
+msgid "March"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:476
+msgid "April"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:477
+msgid "May"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:478
+msgid "June"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:479
+msgid "July"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:480
+msgid "August"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:481
+msgid "September"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:482
+msgid "October"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:483
+msgid "November"
+msgstr ""
+
+#: plugins/metaseo/metaseo.plugin.php:484
+msgid "December"
+msgstr ""
+
