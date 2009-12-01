@@ -57,7 +57,7 @@ class MetaSeo extends Plugin
 			GROUP BY id, tag, slug
 			ORDER BY count DESC, tag ASC
 			LIMIT 0, 50',
-			array(Vocabulary::get(Tags::vocabulary())->id)
+			array( Tags::vocabulary()->id )
 		);
 
 		foreach ( $tags as $tag ) {
