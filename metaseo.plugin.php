@@ -16,7 +16,7 @@ class MetaSeo extends Plugin
 	/**
 	* @var string plugin version number
 	*/
-	const VERSION= '0.5.2';
+	const VERSION= '0.6';
 
 	/**
 	* @var $them Theme object that is currently being use for display
@@ -55,16 +55,18 @@ class MetaSeo extends Plugin
 		$home_keys = array();
 		
 		// this is from the Tags::get() method, altered to return only the top ones
-		$tags = DB::get_results( 'SELECT t.id AS id,
-			t.tag_text AS tag,
-			t.tag_slug AS slug,
-			COUNT(tp.tag_id) AS count
-			FROM {tags} t
-			LEFT JOIN {tag2post} tp ON t.id=tp.tag_id
+		$tags = DB::get_results('
+			SELECT t.id AS id, t.term_display AS tag, t.term AS slug,
+			COUNT(tp.term_id) AS count
+			FROM {terms} t
+			LEFT JOIN {object_terms} tp ON t.id=tp.term_id
+			WHERE t.vocabulary_id = ?
 			GROUP BY id, tag, slug
 			ORDER BY count DESC, tag ASC
-			LIMIT 0, 50' );
-			
+			LIMIT 0, 50',
+			array(Vocabulary::get(Tags::vocabulary())->id)
+		);
+
 		foreach ( $tags as $tag ) {
 			$home_keys[] = htmlspecialchars( strip_tags( $tag->tag ), ENT_COMPAT, 'UTF-8' );
 		}
@@ -279,17 +281,6 @@ class MetaSeo extends Plugin
 	public function action_update_check()
 	{
 		Update::add( 'Meta SEO', 'DE6CFC70-1661-11DD-8BC9-25DB55D89593', $this->info->version );
-	}
-
-	/* function get_tag_text
-	*
-	 * gets the display text from a tag slug
-	*
-	* @param $tag the tag-slug you want the display text for
-	* @return string the tag's display text
-	*/
-	public function get_tag_text( $tag ) {
-		return DB::get_value( "select tag_text from {tags} where tag_slug= ?", array($tag) );
 	}
 
 	/* function get_description
@@ -510,8 +501,8 @@ class MetaSeo extends Plugin
 					$out .= ' - ' . Options::get( 'title' );
 					break;
 				case 'display_entries_by_tag':
-					$out = $this->get_tag_text(Controller::get_var( 'tag' ) ) . ' Archive';
-					$out .= ' - ' . Options::get( 'title' );
+					$out = Tag::get(Controller::get_var( 'tag' ))->tag;
+					$out .= ' Archive - ' . Options::get( 'title' );
 					break;
 				case 'display_entry':
 				case 'display_page':

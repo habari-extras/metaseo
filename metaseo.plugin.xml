@@ -3,7 +3,7 @@
 	<name>Meta SEO</name>
 	<license url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software License 2.0</license>
 	<author url="http://habariproject.org/">Habari Community</author>
-	<version>0.5.2</version>
+	<version>0.6</version>
 	<url>http://habariproject.org</url>
 	<description><![CDATA[Adds search engine optimizations to the page head.]]></description>
 	<copyright>2009</copyright>
