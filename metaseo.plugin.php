@@ -49,23 +49,23 @@ class MetaSeo extends Plugin
 
 		// this is from the Tags::get() method, altered to return only the top ones
 		$tags = DB::get_results('
-			SELECT t.id AS id, t.term_display AS tag, t.term AS slug,
+			SELECT t.id AS id, t.term_display AS term_display, t.term AS term,
 			COUNT(tp.term_id) AS count
 			FROM {terms} t
 			LEFT JOIN {object_terms} tp ON t.id=tp.term_id
 			WHERE t.vocabulary_id = ?
-			GROUP BY id, tag, slug
-			ORDER BY count DESC, tag ASC
+			GROUP BY id, term_display, term
+			ORDER BY count DESC, term_display ASC
 			LIMIT 0, 50',
 			array( Tags::vocabulary()->id )
 		);
 
 		foreach ( $tags as $tag ) {
-			$home_keys[] = htmlspecialchars( strip_tags( $tag->tag ), ENT_COMPAT, 'UTF-8' );
+			$home_keys[] = Utils::htmlspecialchars( strip_tags( $tag->term_display ) );
 		}
 
 		return array(
-			'home_desc' => htmlspecialchars( strip_tags( Options::get( 'tagline' ) ), ENT_COMPAT, 'UTF-8' ),
+			'home_desc' => Utils::htmlspecialchars( strip_tags( Options::get( 'tagline' ) ) ),
 			'home_keywords' => $home_keys,
 			'home_index' => true,
 			'home_follow' => true,
@@ -209,19 +209,19 @@ class MetaSeo extends Plugin
 	{
 		if ( $post->content_type == Post::type( 'entry' ) || $post->content_type == Post::type( 'page' ) ) {
 			if ( strlen( $form->metaseo->html_title->value ) ) {
-				$post->info->html_title = htmlspecialchars( strip_tags( $form->metaseo->html_title->value ), ENT_COMPAT, 'UTF-8' );
+				$post->info->html_title = Utils::htmlspecialchars( strip_tags( $form->metaseo->html_title->value ) );
 			}
 			else {
 				$post->info->__unset( 'html_title' );
 			}
 			if ( strlen( $form->metaseo->description->value ) ) {
-				$post->info->metaseo_desc = htmlspecialchars( Utils::truncate( strip_tags( $form->metaseo->description->value ), 200, false ), ENT_COMPAT, 'UTF-8' );
+				$post->info->metaseo_desc = Utils::htmlspecialchars( Utils::truncate( strip_tags( $form->metaseo->description->value ), 200, false ) );
 			}
 			else {
 				$post->info->__unset( 'metaseo_desc' );
 			}
 			if ( strlen( $form->metaseo->keywords->value ) ) {
-				$post->info->metaseo_keywords = htmlspecialchars( strip_tags( $form->metaseo->keywords->value ), ENT_COMPAT, 'UTF-8' );
+				$post->info->metaseo_keywords = Utils::htmlspecialchars( strip_tags( $form->metaseo->keywords->value ) );
 			}
 			else {
 				$post->info->__unset( 'metaseo_keywords' );
@@ -269,16 +269,6 @@ class MetaSeo extends Plugin
 		return $this->get_keywords() . $this->get_description() . $this->get_robots();
 	}
 
-	/**
-	 * function action_update_check
-	 *
-	 * Add update beacon support
-	 **/
-	public function action_update_check()
-	{
-		Update::add( 'Meta SEO', 'DE6CFC70-1661-11DD-8BC9-25DB55D89593', $this->info->version );
-	}
-
 	/** function get_description
 	 *
 	 * This function creates the meta description tag  based on an excerpt of the post being displayed.
@@ -317,7 +307,7 @@ class MetaSeo extends Plugin
 		if ( strlen( $desc ) ) {
 			$desc = str_replace( "\r\n", " ", $desc );
 			$desc = str_replace( "\n", " ", $desc );
-			$desc = htmlspecialchars( strip_tags( $desc ), ENT_COMPAT, 'UTF-8' );
+			$desc = Utils::htmlspecialchars( strip_tags( $desc ) );
 			$desc = strip_tags( $desc );
 			$out = "<meta name=\"description\" content=\"{$desc}\" >\n";
 		}
@@ -367,7 +357,7 @@ class MetaSeo extends Plugin
 				default:
 			}
 		}
-		$keywords = htmlspecialchars( strip_tags( $keywords ), ENT_COMPAT, 'UTF-8' );
+		$keywords = Utils::htmlspecialchars( strip_tags( $keywords ) );
 		if ( strlen( $keywords ) ) {
 			$out = "<meta name=\"keywords\" content=\"{$keywords}\">\n";
 		}
@@ -497,7 +487,7 @@ class MetaSeo extends Plugin
 					$out .= ' - ' . Options::get( 'title' );
 					break;
 				case 'display_entries_by_tag':
-					$out = Tag::get(Controller::get_var( 'tag' ))->tag;
+					$out = Tags::vocabulary()->get_term(Controller::get_var( 'tag' ))->term_display;
 					$out .= ' Archive - ' . Options::get( 'title' );
 					break;
 				case 'display_entry':
@@ -523,7 +513,7 @@ class MetaSeo extends Plugin
 			}
 
 			if ( strlen( $out ) ) {
-				$out = htmlspecialchars( strip_tags( $out ), ENT_COMPAT, 'UTF-8' );
+				$out = Utils::htmlspecialchars( strip_tags( $out ) );
 				$out = stripslashes( $out );
 			}
 		}
