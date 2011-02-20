@@ -2,8 +2,8 @@
 <pluggable type="plugin">
 	<name>Meta SEO</name>
 	<license url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software License 2.0</license>
-	<author url="http://habariproject.org/">Habari Community</author>
-	<version>0.6</version>
+	<author url="http://habariproject.org/">The Habari Community</author>
+	<version>0.7</version>
 	<guid>DE6CFC70-1661-11DD-8BC9-25DB55D89593</guid>
 	<url>http://habariproject.org</url>
 	<description><![CDATA[Adds search engine optimizations to the page head.]]></description>

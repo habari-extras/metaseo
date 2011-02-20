@@ -82,7 +82,7 @@ class MetaSeo extends Plugin
 	public function action_admin_header( $theme ) {
 		$vars = Controller::get_handler_vars();
 		if ( $theme->admin_page == 'plugins' && isset( $vars['configure'] ) && $vars['configure'] === $this->plugin_id ) {
-			Stack::add('admin_stylesheet', array($this->get_url() . '/metaseo.css', 'screen'));
+			Stack::add( 'admin_stylesheet', array( $this->get_url() . '/metaseo.css', 'screen' ) );
 		}
 	}
 
@@ -116,55 +116,41 @@ class MetaSeo extends Plugin
 	public function filter_plugin_config( $actions, $plugin_id )
 	{
 		if ( $plugin_id == $this->plugin_id() ) {
-			$actions[] = _t( 'Re-Load Top Keywords', 'metaseo' );
-			$actions[] = _t('Configure', 'metaseo' );
+			$actions['reload'] = _t( 'Re-Load Top Keywords', 'metaseo' );
 		}
 		return $actions;
 	}
 
-	/**
-	 * function action_plugin_ui
-	 *
-	 * displays the option form
-	 * @param $plugin_id string id of the plugin that is being called
-	 * @param $action mixed the action begin requested
-	 */
-	public function action_plugin_ui( $plugin_id, $action )
+	public function configure()
 	{
-		if ( $plugin_id == $this->plugin_id() ) {
-			switch ( $action ) {
-				case _t( 'Re-Load Top Keywords', 'metaseo' ):
+		$ui = new FormUI( 'MetaSEO' );
+		// Add a text control for the home page description and textmultis for the home page keywords
+		$ui->append( 'fieldset', 'HomePage', _t( 'HomePage', 'metaseo' ) );
+		$ui->HomePage->append( 'textarea', 'home_desc', 'option:MetaSEO__home_desc', _t( 'Description: ', 'metaseo' ) );
+		$ui->HomePage->append( 'textmulti', 'home_keywords', 'option:MetaSEO__home_keywords', _t( 'Keywords: ', 'metaseo' ) );
 
-					// get the keywords
-					$options = self::default_options();
-					$keywords = $options['home_keywords'];
+		// Add checkboxes for the indexing and link following options
+		$ui->append( 'fieldset', 'Robots', _t( 'Robots', 'metaseo' ) );
+		$ui->Robots->append( 'checkbox', 'home_index', 'option:MetaSEO__home_index', _t( 'Index Home Page', 'metaseo' ) );
+		$ui->Robots->append( 'checkbox', 'home_follow', 'option:MetaSEO__home_follow', _t( 'Follow Home Page Links', 'metaseo' )  );
+		$ui->Robots->append( 'checkbox', 'posts_index', 'option:MetaSEO__posts_index', _t( 'Index Posts', 'metaseo' ) );
+		$ui->Robots->append( 'checkbox', 'posts_follow', 'option:MetaSEO__posts_follow', _t( 'Follow Post Links', 'metaseo' ) );
+		$ui->Robots->append( 'checkbox', 'archives_index', 'option:MetaSEO__archives_index', _t( 'Index Archives', 'metaseo' ) );
+		$ui->Robots->append( 'checkbox', 'archives_follow', 'option:MetaSEO__archives_follow', _t( 'Follow Archive Links', 'metaseo' ) );
 
-					Options::set( 'MetaSEO__home_keywords', $keywords );
+		$ui->append( 'submit', 'save', _t( 'Save', 'metaseo' ) );
+		$ui->out();
+	}
 
-					Session::notice( _t( 'Keywords have been reloaded!', 'metaseo' ) );
+	public function action_plugin_ui_reload( $plugin_id, $action )
+	{
+		// get the keywords
+		$options = self::default_options();
+		$keywords = $options['home_keywords'];
 
-					break;
-				case _t( 'Configure', 'metaseo' ) :
-					$ui = new FormUI( 'MetaSEO' );
-					// Add a text control for the home page description and textmultis for the home page keywords
-					$ui->append( 'fieldset', 'HomePage', _t( 'HomePage', 'metaseo' ) );
-					$ui->HomePage->append( 'textarea', 'home_desc', 'option:MetaSEO__home_desc', _t('Description: ', 'metaseo' ) );
-					$ui->HomePage->append( 'textmulti', 'home_keywords', 'option:MetaSEO__home_keywords', _t( 'Keywords: ', 'metaseo' ) );
+		Options::set( 'MetaSEO__home_keywords', $keywords );
 
-					// Add checkboxes for the indexing and link following options
-					$ui->append( 'fieldset', 'Robots', _t( 'Robots', 'metaseo' ) );
-					$ui->Robots->append( 'checkbox', 'home_index', 'option:MetaSEO__home_index', _t( 'Index Home Page', 'metaseo' ) );
-					$ui->Robots->append( 'checkbox', 'home_follow', 'option:MetaSEO__home_follow', _t( 'Follow Home Page Links', 'metaseo' )  );
-					$ui->Robots->append( 'checkbox', 'posts_index', 'option:MetaSEO__posts_index', _t( 'Index Posts', 'metaseo' ) );
-					$ui->Robots->append( 'checkbox', 'posts_follow', 'option:MetaSEO__posts_follow', _t( 'Follow Post Links', 'metaseo' ) );
-					$ui->Robots->append( 'checkbox', 'archives_index', 'option:MetaSEO__archives_index', _t( 'Index Archives', 'metaseo' ) );
-					$ui->Robots->append( 'checkbox', 'archives_follow', 'option:MetaSEO__archives_follow', _t( 'Follow Archive Links', 'metaseo' ) );
-
-					$ui->append( 'submit', 'save', _t( 'Save', 'metaseo' ) );
-					$ui->out();
-					break;
-			}
-		}
+		Session::notice( _t( 'Keywords have been reloaded!', 'metaseo' ) );
 	}
 
 	/**
@@ -173,7 +159,7 @@ class MetaSeo extends Plugin
 	 * @param FormUI $form The form that is used on the publish page
 	 * @param Post $post The post being edited
 	 */
-	public function action_form_publish($form, $post)
+	public function action_form_publish( $form, $post )
 	{
 		if ( $form->content_type->value == Post::type( 'entry' ) || $form->content_type->value == Post::type( 'page' ) ) {
 
@@ -205,7 +191,7 @@ class MetaSeo extends Plugin
 	 * @param Post $post The post being saved, by reference
 	 * @param FormUI $form The form that was submitted on the publish page
 	 */
-	public function action_publish_post($post, $form)
+	public function action_publish_post( $post, $form )
 	{
 		if ( $post->content_type == Post::type( 'entry' ) || $post->content_type == Post::type( 'page' ) ) {
 			if ( strlen( $form->metaseo->html_title->value ) ) {
@@ -247,7 +233,7 @@ class MetaSeo extends Plugin
 				$buffer = preg_replace( "%<title\b[^>]*>(.*?)</title>%is", "<title>{$seo_title}</title>", $buffer );
 			}
 			else {
-				$buffer = preg_replace("%</head>%is", "<title>{$seo_title}</title>\n</head>", $buffer );
+				$buffer = preg_replace( "%</head>%is", "<title>{$seo_title}</title>\n</head>", $buffer );
 			}
 		}
 		return $buffer;
@@ -263,7 +249,7 @@ class MetaSeo extends Plugin
 	 * @param $theme Theme object being displayed
 	 * @return string the keywords, description, and robots meta tags
 	 */
-	public function theme_header($theme)
+	public function theme_header( $theme )
 	{
 		$this->theme = $theme;
 		return $this->get_keywords() . $this->get_description() . $this->get_robots();
@@ -487,7 +473,8 @@ class MetaSeo extends Plugin
 					$out .= ' - ' . Options::get( 'title' );
 					break;
 				case 'display_entries_by_tag':
-					$out = Tags::vocabulary()->get_term(Controller::get_var( 'tag' ))->term_display;
+					// Assumes there is only one tag term in the url
+					$out = Tags::vocabulary()->get_term( Controller::get_var( 'tag' ) )->term_display;
 					$out .= ' Archive - ' . Options::get( 'title' );
 					break;
 				case 'display_entry':
