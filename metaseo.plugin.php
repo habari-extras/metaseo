@@ -328,7 +328,7 @@ class MetaSeo extends Plugin
 							$keywords = $this->theme->post->info->metaseo_keywords;
 						}
 						else if ( count( $this->theme->post->tags ) > 0 ) {
-							$keywords = implode( ', ', $this->theme->post->tags );
+							$keywords = implode( ', ', (array)$this->theme->post->tags );
 						}
 					}
 					break;
