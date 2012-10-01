@@ -47,18 +47,7 @@ class MetaSeo extends Plugin
 	{
 		$home_keys = array();
 
-		// this is from the Tags::get() method, altered to return only the top ones
-		$tags = DB::get_results('
-			SELECT t.id AS id, t.term_display AS term_display, t.term AS term,
-			COUNT(tp.term_id) AS count
-			FROM {terms} t
-			LEFT JOIN {object_terms} tp ON t.id=tp.term_id
-			WHERE t.vocabulary_id = ?
-			GROUP BY id, term_display, term
-			ORDER BY count DESC, term_display ASC
-			LIMIT 0, 50',
-			array( Tags::vocabulary()->id )
-		);
+		$tags = Tags::get_by_frequency( 50, 'entry' );
 
 		foreach ( $tags as $tag ) {
 			$home_keys[] = Utils::htmlspecialchars( strip_tags( $tag->term_display ) );
