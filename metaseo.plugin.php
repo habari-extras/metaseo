@@ -1,4 +1,7 @@
 <?php
+
+	namespace Habari;
+
 /**
  * Meta SEO an SEO plugin for Habari
  *
