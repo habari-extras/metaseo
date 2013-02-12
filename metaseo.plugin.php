@@ -462,8 +462,26 @@ class MetaSeo extends Plugin
 					$out .= ' - ' . Options::get( 'title' );
 					break;
 				case 'display_entries_by_tag':
-					// Assumes there is only one tag term in the url
-					$out = Tags::vocabulary()->get_term( Controller::get_var( 'tag' ) )->term_display;
+					// parse the tags out of the URL, just like the handler does
+					$tags = Tags::parse_url_tags( Controller::get_var( 'tag' ) );
+
+					// build the pieces we'll use for text
+					$include_tag_text = array();
+					$exclude_tag_text = array();
+					foreach ( $tags['include_tag'] as $include_tag ) {
+						$include_tag_text[] = Tags::vocabulary()->get_term( $include_tag )->term_display;
+					}
+
+					foreach ( $tags['exclude_tag'] as $exclude_tag ) {
+						$exclude_tag_text[] = Tags::vocabulary()->get_term( $exclude_tag )->term_display;
+					}
+
+					$out = Format::and_list( $include_tag_text );
+
+					if ( !empty( $exclude_tag_text ) ) {
+						$out .= ' but not ' . Format::and_list( $exclude_tag_text );
+					}
+
 					$out .= ' Archive - ' . Options::get( 'title' );
 					break;
 				case 'display_entry':
