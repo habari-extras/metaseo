@@ -116,19 +116,19 @@ class MetaSeo extends Plugin
 	public function configure()
 	{
 		$ui = new FormUI( 'MetaSEO' );
-		// Add a text control for the home page description and textmultis for the home page keywords
-		$ui->append( 'fieldset', 'HomePage', _t( 'HomePage', 'metaseo' ) );
-		$ui->HomePage->append( 'textarea', 'home_desc', 'option:MetaSEO__home_desc', _t( 'Description: ', 'metaseo' ) );
-		$ui->HomePage->append( 'textmulti', 'home_keywords', 'option:MetaSEO__home_keywords', _t( 'Keywords: ', 'metaseo' ) );
-
-		// Add checkboxes for the indexing and link following options
-		$ui->append( 'fieldset', 'Robots', _t( 'Robots', 'metaseo' ) );
-		$ui->Robots->append( 'checkbox', 'home_index', 'option:MetaSEO__home_index', _t( 'Index Home Page', 'metaseo' ) );
-		$ui->Robots->append( 'checkbox', 'home_follow', 'option:MetaSEO__home_follow', _t( 'Follow Home Page Links', 'metaseo' )  );
-		$ui->Robots->append( 'checkbox', 'posts_index', 'option:MetaSEO__posts_index', _t( 'Index Posts', 'metaseo' ) );
-		$ui->Robots->append( 'checkbox', 'posts_follow', 'option:MetaSEO__posts_follow', _t( 'Follow Post Links', 'metaseo' ) );
-		$ui->Robots->append( 'checkbox', 'archives_index', 'option:MetaSEO__archives_index', _t( 'Index Archives', 'metaseo' ) );
-		$ui->Robots->append( 'checkbox', 'archives_follow', 'option:MetaSEO__archives_follow', _t( 'Follow Archive Links', 'metaseo' ) );
+		$ui->append( FormControlFieldset::create( 'homepage' )->set_caption( _t( 'HomePage', 'metaseo' ) ) );
+		
+		$ui->homepage->append( FormControlLabel::wrap( _t( 'Description', 'metaseo' ), FormControlTextArea::create( 'home_desc', 'option:MetaSEO__home_desc' ) ) );
+		$ui->homepage->append( FormControlLabel::wrap( _t( 'Keywords', 'metaseo' ), FormControlTextmulti::create( 'home_keywords', 'option:MetaSEO__home_keywords' ) ) );
+		
+		$ui->append( FormControlFieldset::create( 'robots' )->set_caption( _t( 'Robots', 'metaseo' ) ) );
+		
+		$ui->robots->append( FormControlLabel::wrap( _t( 'Index Home Page', 'metaseo' ), FormControlCheckbox::create( 'home_index', 'option:MetaSEO__home_index' ) ) );
+		$ui->robots->append( FormControlLabel::wrap( _t( 'Follow Home Page Links', 'metaseo' ), FormControlCheckbox::create( 'home_follow', 'option:MetaSEO__home_follow' ) ) );
+		$ui->robots->append( FormControlLabel::wrap( _t( 'Index Posts', 'metaseo' ), FormControlCheckbox::create( 'posts_index', 'option:MetaSEO__posts_index' ) ) );
+		$ui->robots->append( FormControlLabel::wrap( _t( 'Follow Post Links', 'metaseo' ), FormControlCheckbox::create( 'posts_follow', 'option:MetaSEO__posts_follow' ) ) );
+		$ui->robots->append( FormControlLabel::wrap( _t( 'Index Archives', 'metaseo' ), FormControlCheckbox::create( 'archives_index', 'option:MetaSEO__archives_index' ) ) );
+		$ui->robots->append( FormControlLabel::wrap( _t( 'Follow Archive Links', 'metaseo' ), FormControlCheckbox::create( 'archives_follow', 'option:MetaSEO__archives_follow' ) ) );
 
 		$ui->append( 'submit', 'save', _t( 'Save', 'metaseo' ) );
 		$ui->out();
