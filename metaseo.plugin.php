@@ -158,7 +158,7 @@ class MetaSeo extends Plugin
 			// pre-calculate our values
 			$title = strlen( $post->info->html_title ) ? $post->info_html_title : '';
 			$keywords = strlen( $post->info->metaseo_keywords ) ? $post->info->metaseo_keywords : '';
-			$description = isset( $post->inof->metaseo_desc ) ? $post->info->metseo_desc : '';
+			$description = isset( $post->info->metaseo_desc ) ? $post->info->metseo_desc : '';
 
 			$metaseo = $form->publish_controls->append( FormControlFieldset::create( 'metaseo' )->set_caption( _t( 'Meta SEO', 'metaseo' ) ));
 			
