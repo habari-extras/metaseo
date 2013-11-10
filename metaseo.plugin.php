@@ -155,19 +155,16 @@ class MetaSeo extends Plugin
 	{
 		if ( $form->content_type->value == Post::type( 'entry' ) || $form->content_type->value == Post::type( 'page' ) ) {
 
-			$metaseo = $form->publish_controls->append( 'fieldset', 'metaseo', _t( 'Meta SEO', 'metaseo' ) );
+			// pre-calculate our values
+			$title = strlen( $post->info->html_title ) ? $post->info_html_title : '';
+			$keywords = strlen( $post->info->metaseo_keywords ) ? $post->info->metaseo_keywords : '';
+			$description = isset( $post->inof->metaseo_desc ) ? $post->info->metseo_desc : '';
 
-			$html_title = $metaseo->append( 'text', 'html_title', 'null:null', _t( 'Page Title', 'metaseo' ) );
-			$html_title->value = strlen( $post->info->html_title ) ? $post->info->html_title : '' ;
-			$html_title->template = 'tabcontrol_text';
-
-			$keywords = $metaseo->append( 'text', 'keywords', 'null:null', _t( 'Keywords', 'metaseo' ) );
-			$keywords->value = strlen( $post->info->metaseo_keywords ) ? $post->info->metaseo_keywords : '' ;
-			$keywords->template = 'tabcontrol_text';
-
-			$description = $metaseo->append( 'textarea', 'description', 'null:null', _t( 'Description', 'metaseo' ) );
-			$description->value = ( isset( $post->info->metaseo_desc ) ? $post->info->metaseo_desc : '' );
-			$description->template = 'tabcontrol_textarea';
+			$metaseo = $form->publish_controls->append( FormControlFieldset::create( 'metaseo' )->set_caption( _t( 'Meta SEO', 'metaseo' ) ));
+			
+			$metaseo->append( FormControlLabel::wrap( _t( 'Page Title', 'metaseo' ), FormControlText::create( 'html_title' )->set_value( $title ) ) );
+			$metaseo->append( FormControlLabel::wrap( _t( 'Keywords', 'metaseo' ), FormControlText::create( 'keywords' )->set_value( $keywords ) ) );
+			$metaseo->append( FormControlLabel::wrap( _t( 'Description', 'metaseo' ), FormControlTextArea::create( 'description' )->set_value( $description ) ) );
 		}
 	}
 
